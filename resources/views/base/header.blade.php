@@ -47,6 +47,10 @@
                           <a class="nav-link active" href="/home" aria-expanded="false" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
                       </li>
 
+                      <li class="nav-item ">
+                          <a class="nav-link" href="/genre" aria-expanded="false" aria-controls="submenu-1"><i class="fas fa-th-list"></i>Genre <span class="badge badge-success">6</span></a>
+                      </li>
+
                       <li class="nav-item">
                           <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fas fa-fw fa-table"></i>Tables</a>
                           <div id="submenu-5" class="collapse submenu" style="">
