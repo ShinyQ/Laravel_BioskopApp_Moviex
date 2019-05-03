@@ -128,14 +128,16 @@
                  </thead>
                  <tbody>
                     @foreach ($film as $item)
+                      <?php  $jadwal1 = $item->start_at ?>
+                       <?php  $jadwal2 = $item->end_at  ?>
                       <tr>
                         <th scope="row">{{ $counter++ }}</th>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->deskripsi }}</td>
                         <td>{{ $item->genre->name }}</td>
                         <td>{{ $item->studio->name }}</td>
-                        <td>{{ $item->start_at }}</td>
-                        <td>{{ $item->end_at }}</td>
+                        <td>{{ date('H:i',strtotime($jadwal1))  }}</td>
+                        <td>{{ date('H:i',strtotime($jadwal2))  }}</td>
                         <td>
                            <a class="btn btn-warning" style="color:white!important" href="/film/{{ $item->id }}"><i class="fa fa-edit"></i></a>
                            <a class="btn btn-danger" href="/film/delete/{{ $item->id }}"><i class="fa fa-trash"></i></a>

@@ -43,7 +43,8 @@ Route::prefix('film')->group(function(){
 
 Route::prefix('order')->group(function(){
     Route::get('/', 'OrdersController@index');
-    Route::get('{id}', 'OrdersController@show');
+    Route::get('detail/{id}', 'OrdersController@show');
+    Route::get('{id}', 'OrdersController@edit');
     Route::get('delete/{id}', 'OrdersController@destroy');
     Route::post('/', 'OrdersController@store');
     Route::put('{id}', 'OrdersController@update');

@@ -29,7 +29,7 @@ use Illuminate\Http\Request;
       Route::apiResource("user", "Api\UserController");
       Route::apiResource("genre", "Api\GenresController");
       Route::apiResource("studio", "Api\StudioController");
-      Route::apiResource("film", "Api\FilmController");
+      Route::apiResource("film", "Api\FilmsController");
       Route::apiResource("order", "Api\OrderController");
     });
   });
