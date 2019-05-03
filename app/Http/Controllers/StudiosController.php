@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Studios;
+use Session;
+use Illuminate\Support\Facades\DB;
 
 class StudiosController extends Controller
 {
@@ -13,7 +16,12 @@ class StudiosController extends Controller
      */
     public function index()
     {
-        //
+      $counter= 1;
+      $studio =  Studios::all();
+      return view('studio',
+             compact('studio',
+                     'counter'
+                    ));
     }
 
     /**
@@ -34,7 +42,15 @@ class StudiosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $this->validate($request, [
+          'name'        => 'required',
+          'quota'        => 'required',
+          'price'        => 'required',
+      ]);
+      $studio = new Studios($request->except("_token"));
+      $studio->save();
+      Session::flash('sukses_tambah', 'Data Berhasil Ditambahkan');
+      return redirect()->back();
     }
 
     /**
@@ -45,7 +61,9 @@ class StudiosController extends Controller
      */
     public function show($id)
     {
-        //
+      $studio = Studios::findOrFail($id);
+      return view('studio_edit',
+             compact('studio',));
     }
 
     /**
@@ -68,7 +86,18 @@ class StudiosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, [
+          'name'        => 'required',
+          'quota'        => 'required',
+          'price'        => 'required',
+      ]);
+      $studio = Studios::findOrFail($id);
+      $studio->name = $request->name;
+      $studio->quota = $request->quota;
+      $studio->price = $request->price;
+      $studio->save();
+      Session::flash('sukses', 'Data Berhasil Di Edit');
+      return redirect()->back();
     }
 
     /**
@@ -79,6 +108,8 @@ class StudiosController extends Controller
      */
     public function destroy($id)
     {
-        //
+      Studios::where('id',$id)->delete();
+      Session::flash('sukses', 'Data Berhasil dihapus');
+      return redirect()->back();
     }
 }

@@ -30,23 +30,23 @@ Route::prefix('genre')->group(function(){
 Route::prefix('studio')->group(function(){
     Route::get('/', 'StudiosController@index');
     Route::get('{id}', 'StudiosController@show');
-    Route::get('{id}', 'StudiosController@delete');
+    Route::get('delete/{id}', 'StudiosController@destroy');
     Route::post('/', 'StudiosController@store');
-    Route::put('/', 'StudiosController@update');
+    Route::put('{id}', 'StudiosController@update');
 });
 
 Route::prefix('film')->group(function(){
     Route::get('/', 'FilmsController@index');
     Route::get('{id}', 'FilmsController@show');
-    Route::get('{id}', 'FilmsController@delete');
+    Route::get('delete/{id}', 'FilmsController@destroy');
     Route::post('/', 'FilmsController@store');
-    Route::put('/', 'FilmsController@update');
+    Route::put('{id}', 'FilmsController@update');
 });
 
 Route::prefix('order')->group(function(){
     Route::get('/', 'OrdersController@index');
     Route::get('{id}', 'OrdersController@show');
-    Route::get('{id}', 'OrdersController@delete');
+    Route::get('delete/{id}', 'OrdersController@destroy');
     Route::post('/', 'OrdersController@store');
-    Route::put('/', 'OrdersController@update');
+    Route::put('{id}', 'OrdersController@update');
 });
