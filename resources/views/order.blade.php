@@ -105,7 +105,7 @@
                         <td>Rp{{ number_format( $item->total_price,2,',','.')}}</td>
                         <td>
                            <a class="btn btn-info" style="color:white!important" href="order/detail/{{ $item->id }}"><i class="fa fa-eye"></i></a>
-                           <a class="btn btn-warning" style="color:white!important" href="/film/{{ $item->id }}"><i class="fa fa-edit"></i></a>
+                           <a class="btn btn-warning" style="color:white!important" href="/order/{{ $item->id }}"><i class="fa fa-edit"></i></a>
                            <a class="btn btn-danger" href="/order/delete/{{ $item->id }}"><i class="fa fa-trash"></i></a>
                         </td>
                       </tr>
@@ -118,6 +118,6 @@
                   {!! $order->appends(request()->all())->links() !!}
               </center>
           </div>
-         </div
+        </div>
 
 @endsection

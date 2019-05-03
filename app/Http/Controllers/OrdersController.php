@@ -79,15 +79,35 @@ class OrdersController extends Controller
       if($checkquota <= 0){
         Session::flash('gagal', 'Quota Film Sudah Tidak Mencukupi');
       }
-      else{
-      $KurangiQuota = $checkquota;
-      $dataStudio = Studios::find($checkfilm->studio_id);
-      $dataStudio->quota = $KurangiQuota;
-      $dataStudio->save();
 
-      $response = new Orders($request->except("_token"));
-      $response->total_price = ($request->qty * $checkharga->price);
-      $response->save();
+      else{
+        $order = Orders::all();
+        $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
+        if($checkOrder){
+          $response = Orders::find($checkOrder->id);
+          $response->qty = $EditOrder->qty + $request->qty;
+          $response->save();
+
+          $KurangiQuota = $checkquota;
+          $dataStudio = Studios::find($checkfilm->studio_id);
+          $dataStudio->quota = $KurangiQuota;
+          $dataStudio->save();
+
+          Session::flash('sukses', 'Sukses Menambahkan Order');
+        }
+
+        else{
+          $KurangiQuota = $checkquota;
+          $dataStudio = Studios::find($checkfilm->studio_id);
+          $dataStudio->quota = $KurangiQuota;
+          $dataStudio->save();
+
+          $response = new Orders($request->except("_token"));
+          $response->total_price = ($request->qty * $checkharga->price);
+          $response->save();
+
+                      Session::flash('sukses', 'Sukses Menambahkan Order Baru');
+        }
       }
 
       return redirect()->back();
@@ -123,7 +143,18 @@ class OrdersController extends Controller
      */
     public function edit($id)
     {
-        //
+      $genre =  Genres::all();
+      $studio =  Studios::all();
+      $user =  User::all();
+      $film =  Films::all();
+      $order = Orders::findOrFail($id);
+      return view('order_edit',
+             compact('film',
+                     'genre',
+                     'studio',
+                     'user',
+                     'order'
+                    ));
     }
 
     /**
@@ -135,8 +166,53 @@ class OrdersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, [
+            'qty'            => 'required',
+      ]);
+      $checkfilm = Films::where('id', $request->film_id)->first();
+      $checkharga = Studios::where('id', $checkfilm->studio_id)->first();
+      $checkquotasekarang = Orders::findOrFail($id);
+
+      if($checkquotasekarang->qty < $request->qty){
+        $KurangiQuota =  $request->qty - $checkquotasekarang->qty;
+        $dataStudio = Studios::find($checkfilm->studio_id);
+        $dataStudio->quota = $dataStudio->quota - $KurangiQuota;
+        $dataStudio->save();
+
+        $order = Orders::findOrFail($id);
+        $order->qty = $request->qty;
+        $order->save();
+        Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');
+      }
+      elseif($checkquotasekarang->qty > $request->qty){
+        if($checkquota <= 0){
+          Session::flash('gagal', 'Quota Film Sudah Tidak Mencukupi');
+        }
+        else{
+          $TambahQuota =  $checkquotasekarang->qty - $request->qty;
+          $dataStudio = Studios::find($checkfilm->studio_id);
+          $dataStudio->quota = $dataStudio->quota + $TambahQuota;
+          $dataStudio->save();
+
+          $order = Orders::findOrFail($id);
+          $order->qty = $request->qty;
+          $order->save();
+
+          Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');
+        }
+      }
+
+      else{
+        $order = Orders::findOrFail($id);
+        $order->qty = $request->qty;
+        $order->save();
+        Session::flash('Sukses', 'Quota Film Berhasil Diubah');
+      }
+
+      return redirect()->back();
     }
+
+
 
     /**
      * Remove the specified resource from storage.

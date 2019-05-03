@@ -15,7 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/logout1', 'Auth\LoginController@dologout');
 Route::get('/home', 'HomeController@index');
+Route::get('/login', 'Auth\LoginController@index');
+Route::get('/register', 'Auth\RegisterController@index');
+Route::post('/login1', 'Auth\LoginController@doLogin');
+Route::post('/register1', 'Auth\RegisterController@doRegister');
 
 Route::prefix('genre')->group(function(){
     Route::get('/', 'GenresController@index');

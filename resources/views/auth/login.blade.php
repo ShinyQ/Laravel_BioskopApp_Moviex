@@ -36,12 +36,12 @@
         <div class="card ">
             <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{{url('assets/images/logo.png')}}" alt="logo"></a><span class="splash-description">Login Untuk Melanjutkan</span></div>
             <div class="card-body">
-                <form>
+                <form action="login1" method="post">
                     <div class="form-group">
-                        <input class="form-control form-control-lg" id="username" type="text" placeholder="Username" autocomplete="off">
+                        <input class="form-control form-control-lg" name="email" id="username" type="text" placeholder="Username" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" id="password" type="password" placeholder="Password">
+                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password">
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>

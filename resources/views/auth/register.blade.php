@@ -60,7 +60,7 @@
 
             </div>
             <div class="card-footer bg-white">
-                <p>Sudah Punya Akun ? <a href="#" class="text-secondary">Login Disini</a></p>
+                <p>Sudah Punya Akun ? <a href="/login" class="text-secondary">Login Disini</a></p>
             </div>
         </div>
     </form>
