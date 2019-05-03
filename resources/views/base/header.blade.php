@@ -44,11 +44,7 @@
                       </li>
 
                       <li class="nav-item ">
-                          <a class="nav-link active" href="/home" aria-expanded="false" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
-                      </li>
-
-                      <li class="nav-item ">
-                          <a class="nav-link" href="/studio" aria-expanded="false" aria-controls="submenu-1"><i class="fa fa-home"></i>Studio <span class="badge badge-success">6</span></a>
+                          <a class="nav-link active" href="/studio" aria-expanded="false" aria-controls="submenu-1"><i class="fa fa-home"></i>Studio <span class="badge badge-success">6</span></a>
                       </li>
 
                       <li class="nav-item ">
@@ -63,7 +59,7 @@
                           <a class="nav-link" href="/order" aria-expanded="false" aria-controls="submenu-1"><i class="fas fa-ticket-alt"></i>Order <span class="badge badge-success">6</span></a>
                       </li>
 
-                      
+
                             </ul>
                         </div>
                     </li>

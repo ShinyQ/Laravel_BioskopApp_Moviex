@@ -84,8 +84,10 @@ class OrdersController extends Controller
         $order = Orders::all();
         $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
         if($checkOrder){
+          $ubahqty = $checkOrder->qty + $request->qty;
           $response = Orders::find($checkOrder->id);
-          $response->qty = $EditOrder->qty + $request->qty;
+          $response->qty = $ubahqty;
+          $response->total_price = $ubahqty * $checkharga->price;
           $response->save();
 
           $KurangiQuota = $checkquota;
@@ -106,7 +108,7 @@ class OrdersController extends Controller
           $response->total_price = ($request->qty * $checkharga->price);
           $response->save();
 
-                      Session::flash('sukses', 'Sukses Menambahkan Order Baru');
+          Session::flash('sukses', 'Sukses Menambahkan Order Baru');
         }
       }
 

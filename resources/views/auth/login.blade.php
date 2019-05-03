@@ -36,7 +36,7 @@
         <div class="card ">
             <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{{url('assets/images/logo.png')}}" alt="logo"></a><span class="splash-description">Login Untuk Melanjutkan</span></div>
             <div class="card-body">
-                <form action="login1" method="post">
+                <form action="#" method="post">
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="email" id="username" type="text" placeholder="Username" autocomplete="off">
                     </div>
@@ -44,12 +44,13 @@
                         <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password">
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                    {{-- <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button> --}}
+                    <a href="/genre" class="btn btn-primary btn-lg btn-block">Login</a>
                 </form>
             </div>
             <div class="card-footer bg-white p-0  ">
                 <div class="card-footer-item card-footer-item-bordered">
-                        Belum Punya Akun ?<a href="/register" class="footer-link"> <strong>Klik Disini</strong></a>
+                    Belum Punya Akun ?<a href="/register" class="footer-link"> <strong>Klik Disini</strong></a>
                 </div>
             </div>
         </div>
