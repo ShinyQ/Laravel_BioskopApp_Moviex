@@ -2,38 +2,57 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Models\Customers;
+use ApiBuilder;
+use Session;
+use Hash;
+use Bcrypt;
+use App\User;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
-    use AuthenticatesUsers;
+  public function index(){
+    return view('auth/login');
+  }
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
+  public function login(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+        'email' => ['required', 'email'],
+        'password' => ['required']
+    ]);
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
+    if ($validator->fails()) {
+        return ApiBuilder::apiResponseValidationFails('Login validation fails!', $validator->errors()->all(), 422);
     }
+
+    if (Auth::attempt([
+        'email' => $request->email,
+        'password' => $request->password
+    ])) {
+        $user = Auth::user();
+        $success['user'] = $user;
+        $success['token'] = $user->createToken('myApp')->accessToken;
+        return ApiBuilder::apiResponseSuccess('Anda berhasil login!', $success, 200);
+    } else {
+        return ApiBuilder::apiResponseErrors('Gagal login!', [
+            'User belum terdaftar atau password anda salah'
+        ], 401);
+    }
+  }
+
+  /**
+  * logout user
+  */
+  public function logout()
+  {
+    Auth::logout();
+    return ApiBuilder::apiResponseSuccess('Anda berhasil logout', null, 200);
+  }
+
 }

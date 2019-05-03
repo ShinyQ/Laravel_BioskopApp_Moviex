@@ -15,8 +15,21 @@ class GenresController extends Controller
      */
     public function index()
     {
+        $genre = Genres::query();
+        $genre->latest();
+        if (request()->has("search") && strlen(request()->query("search")) >= 1) {
+          $genre->where(
+            "genres.name", "like", "%" . request()->query("search") . "%"
+          );
+        }
         $counter = 1;
-        $genre = Genres::all();
+        $pagination = 5;
+        $genre = $genre->paginate($pagination);
+        if( request()->has('page') && request()->get('page') > 1){
+          $counter += (request()->get('page')- 1) * $pagination;
+        }
+
+        $counter = 1;
         return view('genre',
                compact('genre',
                        'counter'

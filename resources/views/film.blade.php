@@ -102,6 +102,17 @@
              </div>
            @endif
            <label for="inputText3" class="col-form-label">List Genre Film</label>
+
+           <div class="row">
+             <div class="col-md-3 pull-right">
+               <form action="/film" method="GET">
+                  <span class="pull-right">
+                    <input type="text" name="search" class="form-control" placeholder="Search here ..">
+                  </span>
+                </form>
+             </div>
+           </div><br />
+
                <table class="table table-striped">
                  <thead>
                      <tr>
@@ -134,6 +145,11 @@
                  </tbody>
              </table>
             </div>
+          <div class="col-md-12" style="margin:0; text-align:center;">
+              <center>
+                  {!! $film->appends(request()->all())->links() !!}
+              </center>
+          </div>
          </div
 
 @endsection

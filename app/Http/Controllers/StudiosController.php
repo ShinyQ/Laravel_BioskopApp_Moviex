@@ -17,13 +17,25 @@ class StudiosController extends Controller
      */
     public function index()
     {
-      $counter= 1;
-      $studio =  Studios::all();
-      $genre =  Genres::all();
+      $studio = Studios::query();
+      $studio->latest();
+      if (request()->has("search") && strlen(request()->query("search")) >= 1) {
+        $studio->where(
+          "studios.name", "like", "%" . request()->query("search") . "%"
+        );
+      }
+      $counter = 1;
+      $pagination = 5;
+      $studio = $studio->paginate($pagination);
+      if( request()->has('page') && request()->get('page') > 1){
+        $counter += (request()->get('page')- 1) * $pagination;
+      }
+
       return view('studio',
              compact('studio',
-                     'counter'
+                     'counter',
                     ));
+
     }
 
     /**

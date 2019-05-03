@@ -17,10 +17,23 @@ class FilmsController extends Controller
      */
     public function index()
     {
+
+      $film = Films::query();
+      $film->latest();
+      if (request()->has("search") && strlen(request()->query("search")) >= 1) {
+        $film->where(
+          "films.name", "like", "%" . request()->query("search") . "%"
+        );
+      }
       $counter = 1;
+      $pagination = 5;
+      $film = $film->paginate($pagination);
+      if( request()->has('page') && request()->get('page') > 1){
+        $counter += (request()->get('page')- 1) * $pagination;
+      }
+
       $genre =  Genres::all();
       $studio =  Studios::all();
-      $film = Films::all();
       return view('film',
              compact('film',
                      'genre',
