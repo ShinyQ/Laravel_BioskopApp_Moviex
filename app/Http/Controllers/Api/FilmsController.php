@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use App\Genres;
+use Exception;
 use App\Films;
 use ApiBuilder;
 
@@ -19,7 +23,7 @@ class FilmsController extends Controller
       try {
         $code = 200;
         $counter = 1;
-        $response = Films::query()->latest();
+        $response = Films::query()->with('genre','studio')->latest();
         if (request()->has("search") && strlen(request()->query("search")) >= 1) {
           $response->where(
             "films.name", "like", "%" . request()->query("search") . "%"
@@ -55,7 +59,24 @@ class FilmsController extends Controller
      */
     public function show($id)
     {
-        //
+      try {
+        $code= "200";
+        $response = Films::with('genre','studio')->findOrFail($id);
+      } catch (\Exception $e) {
+        if($e instanceof ValidationException){
+          $response = $e->errors();
+          $code = 400;
+        }
+        elseif($e instanceof ModelNotFoundException){
+          $code= 404;
+          $response = "Data Not Exist";
+        }
+        else{
+          $code= 500;
+          $response = "An Error Has Ocurred";
+        }
+      }
+      return ApiBuilder::apiRespond($code, $response);
     }
 
     /**
