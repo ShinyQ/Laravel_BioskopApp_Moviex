@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Studios;
+use App\Genres;
 use Session;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,7 @@ class StudiosController extends Controller
     {
       $counter= 1;
       $studio =  Studios::all();
+      $genre =  Genres::all();
       return view('studio',
              compact('studio',
                      'counter'

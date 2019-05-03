@@ -48,7 +48,15 @@
                       </li>
 
                       <li class="nav-item ">
+                          <a class="nav-link" href="/studio" aria-expanded="false" aria-controls="submenu-1"><i class="fa fa-home"></i>Studio <span class="badge badge-success">6</span></a>
+                      </li>
+
+                      <li class="nav-item ">
                           <a class="nav-link" href="/genre" aria-expanded="false" aria-controls="submenu-1"><i class="fas fa-th-list"></i>Genre <span class="badge badge-success">6</span></a>
+                      </li>
+
+                      <li class="nav-item ">
+                          <a class="nav-link" href="/film" aria-expanded="false" aria-controls="submenu-1"><i class="fas fa-film"></i>Film <span class="badge badge-success">6</span></a>
                       </li>
 
                       <li class="nav-item">

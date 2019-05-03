@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Films;
+use App\Genres;
+use App\Studios;
+use Session;
 use Illuminate\Http\Request;
 
 class FilmsController extends Controller
@@ -13,7 +17,16 @@ class FilmsController extends Controller
      */
     public function index()
     {
-        //
+      $counter = 1;
+      $genre =  Genres::all();
+      $studio =  Studios::all();
+      $film = Films::all();
+      return view('film',
+             compact('film',
+                     'genre',
+                     'studio',
+                     'counter'
+                    ));
     }
 
     /**
@@ -34,7 +47,18 @@ class FilmsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $this->validate($request, [
+          'name'        => 'required',
+          'deskripsi'        => 'required',
+          'genre_id'        => 'required',
+          'studio_id'        => 'required',
+          'start_at'        => 'required',
+          'end_at'        => 'required',
+      ]);
+      $film = new Films($request->except("_token"));
+      $film->save();
+      Session::flash('sukses_tambah', 'Data Berhasil Ditambahkan');
+      return redirect()->back();
     }
 
     /**
@@ -45,7 +69,11 @@ class FilmsController extends Controller
      */
     public function show($id)
     {
-        //
+      $genre =  Genres::all();
+      $studio =  Studios::all();
+      $film = Films::findOrFail($id);
+      return view('film_edit',
+             compact('film','genre','studio'));
     }
 
     /**
@@ -68,7 +96,24 @@ class FilmsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, [
+          'name'        => 'required',
+          'deskripsi'        => 'required',
+          'genre_id'        => 'required',
+          'start_at'        => 'required',
+          'end_at'        => 'required',
+          'studio_id'        => 'required',
+      ]);
+      $film = Films::findOrFail($id);
+      $film->name = $request->name;
+      $film->deskripsi = $request->deskripsi;
+      $film->genre_id = $request->genre_id;
+      $film->studio_id = $request->studio_id;
+      $film->start_at = $request->start_at;
+      $film->end_at = $request->end_at;
+      $film->save();
+      Session::flash('sukses', 'Data Berhasil Di Edit');
+      return redirect()->back();
     }
 
     /**
@@ -79,6 +124,8 @@ class FilmsController extends Controller
      */
     public function destroy($id)
     {
-        //
+      Films::where('id',$id)->delete();
+      Session::flash('sukses', 'Data Berhasil dihapus');
+      return redirect()->back();
     }
 }
