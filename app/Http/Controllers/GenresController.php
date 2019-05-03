@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Genres;
+use Session;
 
 class GenresController extends Controller
 {
@@ -13,7 +15,12 @@ class GenresController extends Controller
      */
     public function index()
     {
-        return view('genre');
+        $counter = 1;
+        $genre = Genres::all();
+        return view('genre',
+               compact('genre',
+                       'counter'
+               ));
     }
 
     /**
@@ -23,7 +30,7 @@ class GenresController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -34,7 +41,13 @@ class GenresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $this->validate($request, [
+            'name'        => 'required',
+      ]);
+      $genre = new Genres($request->except("_token"));
+      $genre->save();
+      Session::flash('sukses_tambah', 'Data Berhasil Ditambahkan');
+      return redirect()->back();
     }
 
     /**
@@ -45,7 +58,9 @@ class GenresController extends Controller
      */
     public function show($id)
     {
-        //
+      $genre = Genres::findOrFail($id);
+      return view('genre_edit',
+             compact('genre'));
     }
 
     /**
@@ -68,7 +83,14 @@ class GenresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $this->validate($request, [
+            'name'        => 'required',
+      ]);
+      $genre = Genres::findOrFail($id);
+      $genre->name = $request->name;
+      $genre->save();
+      Session::flash('sukses', 'Data Berhasil Di Edit');
+      return redirect()->back();
     }
 
     /**
@@ -79,6 +101,8 @@ class GenresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Genres::where('id',$id)->delete();
+        Session::flash('sukses', 'Data Berhasil dihapus');
+        return redirect()->back();
     }
 }

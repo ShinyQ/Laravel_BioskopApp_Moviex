@@ -1,3 +1,4 @@
+
 <div class="footer">
     <div class="container-fluid">
         <div class="row">
@@ -17,6 +18,3 @@
 
 </div>
 </div>
-
-<script src="{{url('assets/vendor/jquery/jquery-3.3.1.min.js')}}"></script>
-<script src="{{url('assets/vendor/bootstrap/js/bootstrap.bundle.js')}}"></script>

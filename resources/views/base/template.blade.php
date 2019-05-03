@@ -11,6 +11,8 @@
     <link href="{{url('assets/vendor/fonts/circular-std/style.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="{{url('assets/libs/css/style.css')}}">
     <link rel="stylesheet" href="{{url('assets/vendor/fonts/fontawesome/css/fontawesome-all.css')}}">
+    <script src="{{url('assets/vendor/jquery/jquery-3.3.1.min.js')}}"></script>
+    <script src="{{url('assets/vendor/bootstrap/js/bootstrap.bundle.js')}}"></script>
 </head>
 
 <body>

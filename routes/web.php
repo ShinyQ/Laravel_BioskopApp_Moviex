@@ -22,9 +22,9 @@ Route::get('/home', 'HomeController@index');
 Route::prefix('genre')->group(function(){
     Route::get('/', 'GenresController@index');
     Route::get('{id}', 'GenresController@show');
-    Route::get('{id}', 'GenresController@delete');
+    Route::get('delete/{id}', 'GenresController@destroy');
     Route::post('/', 'GenresController@store');
-    Route::put('/', 'GenresController@update');
+    Route::put('{id}', 'GenresController@update');
 });
 
 Route::prefix('studio')->group(function(){
