@@ -18,3 +18,35 @@ Route::get('/', function () {
 });
 
 Route::get('/home', 'HomeController@index');
+
+Route::prefix('genre')->group(function(){
+    Route::get('/', 'GenresController@index');
+    Route::get('{id}', 'GenresController@show');
+    Route::get('{id}', 'GenresController@delete');
+    Route::post('/', 'GenresController@store');
+    Route::put('/', 'GenresController@update');
+});
+
+Route::prefix('studio')->group(function(){
+    Route::get('/', 'StudiosController@index');
+    Route::get('{id}', 'StudiosController@show');
+    Route::get('{id}', 'StudiosController@delete');
+    Route::post('/', 'StudiosController@store');
+    Route::put('/', 'StudiosController@update');
+});
+
+Route::prefix('film')->group(function(){
+    Route::get('/', 'FilmsController@index');
+    Route::get('{id}', 'FilmsController@show');
+    Route::get('{id}', 'FilmsController@delete');
+    Route::post('/', 'FilmsController@store');
+    Route::put('/', 'FilmsController@update');
+});
+
+Route::prefix('order')->group(function(){
+    Route::get('/', 'OrdersController@index');
+    Route::get('{id}', 'OrdersController@show');
+    Route::get('{id}', 'OrdersController@delete');
+    Route::post('/', 'OrdersController@store');
+    Route::put('/', 'OrdersController@update');
+});
