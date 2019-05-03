@@ -35,7 +35,6 @@ class StudiosController extends Controller
              compact('studio',
                      'counter',
                     ));
-
     }
 
     /**

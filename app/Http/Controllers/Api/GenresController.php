@@ -20,13 +20,23 @@ class GenresController extends Controller
     public function index()
     {
       try {
-        $counter = 1;
-        $response = Genres::all();
+
         $code = 200;
+        $counter = 1;
+        $response = Genres::query()->latest();
+        if (request()->has("search") && strlen(request()->query("search")) >= 1) {
+          $response->where(
+            "genres.name", "like", "%" . request()->query("search") . "%"
+        );}
+
+        $pagination = 5;
+        $response = $response->paginate($pagination);
+
       } catch (\Exception $e) {
         $code = 500;
         $response = "An Error Has Ocurred";
       }
+
       return ApiBuilder::apiRespond($code, $response);
 
     }
@@ -34,17 +44,31 @@ class GenresController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $response
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         try {
+          $this->validate($request, [
+                'name'        => 'required',
+          ]);
+
+          $code= "200";
+          $response = new Genres($request->except("_token"));
+          $response->save();
 
         } catch (\Exception $e) {
-
+          if($e instanceof ValidationException){
+            $response = $e->errors();
+            $code = 400;
+          }
+          else{
+            $code= "500";
+            $response = "An Error Has Ocurred";
+          }
         }
-
+        return ApiBuilder::apiRespond($code, $response);
     }
 
     /**
@@ -78,13 +102,37 @@ class GenresController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request  $response
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
+      try {
+        $this->validate($request, [
+              'name'        => 'required',
+        ]);
+
+        $code= "200";
+        $response = Genres::findOrFail($id);
+        $response->name = $request->name;
+        $response->save();
+
+      } catch (\Exception $e) {
+        if($e instanceof ValidationException){
+          $response = $e->errors();
+          $code = 400;
+        }
+        elseif($e instanceof ModelNotFoundException){
+          $code= 404;
+          $response = "Data Not Exist";
+        }
+        else{
+          $code= "500";
+          $response = "An Error Has Ocurred";
+        }
+      }
+      return ApiBuilder::apiRespond($code, $response);
     }
 
     /**
@@ -95,6 +143,14 @@ class GenresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+          Genres::where('id',$id)->delete();
+          $response = "Success Delete";
+          $code = 200;
+        } catch (\Exception $e) {
+          $code= "500";
+          $response = "An Error Has Ocurred";
+        }
+        return ApiBuilder::apiRespond($code, $response);
     }
 }
