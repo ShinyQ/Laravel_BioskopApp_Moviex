@@ -69,9 +69,10 @@ class OrderController extends Controller
           $order = Orders::all();
           $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
           if($checkOrder){
+            $ubahqty = $checkOrder->qty + $request->qty;
             $response = Orders::find($checkOrder->id);
-            $response->qty = $response->qty + $request->qty;
-
+            $response->qty = $ubahqty;
+            $response->total_price = $ubahqty * $checkharga->price;
             $response->save();
 
             $KurangiQuota = $checkquota;
@@ -149,7 +150,65 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+          $this->validate($request, [
+                'qty'            => 'required',
+          ]);
+          $checkfilm = Films::where('id', $request->film_id)->first();
+          $checkharga = Studios::where('id', $checkfilm->studio_id)->first();
+          $checkquotasekarang = Orders::findOrFail($id);
+
+          if($checkquotasekarang->qty < $request->qty){
+            $KurangiQuota =  $request->qty - $checkquotasekarang->qty;
+            $dataStudio = Studios::find($checkfilm->studio_id);
+            $dataStudio->quota = $dataStudio->quota - $KurangiQuota;
+            $dataStudio->save();
+
+            $response = Orders::findOrFail($id);
+            $response ->qty = $request->qty;
+            $response ->save();
+            Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');
+          }
+          elseif($checkquotasekarang->qty > $request->qty){
+            if($checkquota <= 0){
+              $code = 402;
+              $response = "Quota Tidak Mencukupi";
+            }
+            else{
+              $TambahQuota =  $checkquotasekarang->qty - $request->qty;
+              $dataStudio = Studios::find($checkfilm->studio_id);
+              $dataStudio->quota = $dataStudio->quota + $TambahQuota;
+              $dataStudio->save();
+
+              $response = Orders::findOrFail($id);
+              $response->qty = $request->qty;
+              $response->save();
+
+              $code = 200;
+            }
+          }
+
+          else{
+            $response = Orders::findOrFail($id);
+            $response->qty = $request->qty;
+            $response->save();
+            $code = 200;
+          }
+        } catch (\Exception $e) {
+            if($e instanceof ValidationException){
+              $response = $e->errors();
+              $code = 400;
+            }
+            elseif($e instanceof ModelNotFoundException){
+              $code= 404;
+              $response = "Data Not Exist";
+            }
+            else{
+              $code= 500;
+              $response = "An Error Has Ocurred";
+            }
+        }
+
     }
 
     /**
@@ -160,6 +219,22 @@ class OrderController extends Controller
      */
     public function destroy($id)
     {
-        //
+      try {
+        $checkorder = Orders::where('id', $id)->first();
+        $checkfilm = Films::where('id', $checkorder->film_id)->first();
+        $studiofilm = Studios::where('id', $checkfilm->studio_id)->first();
+        $TambahQuota =  $checkorder->qty + $studiofilm->quota;
+
+        $dataStudio = Studios::find($checkfilm->studio_id);
+        $dataStudio->quota = $TambahQuota;
+        $dataStudio->save();
+        $code = 200;
+        Orders::where('id',$id)->delete();
+      } catch (\Exception $e) {
+          $code= 500;
+          $response = "An Error Has Ocurred";
+      }
+
+
     }
 }

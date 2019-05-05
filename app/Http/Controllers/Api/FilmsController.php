@@ -48,7 +48,30 @@ class FilmsController extends Controller
      */
     public function store(Request $request)
     {
-      
+      try {
+        $this->validate($request, [
+            'name'        => 'required',
+            'deskripsi'        => 'required',
+            'genre_id'        => 'required',
+            'studio_id'        => 'required',
+            'start_at'        => 'required',
+            'end_at'        => 'required',
+        ]);
+        $response = new Films($request->except("_token"));
+        $response->save();
+        $code = 200;
+      } catch (\Exception $e) {
+        if($e instanceof ValidationException){
+          $response = $e->errors();
+          $code = 400;
+        }
+        else{
+          $code= 500;
+          $response = "An Error Has Ocurred";
+        }
+      }
+      return ApiBuilder::apiRespond($code, $response);
+
     }
 
     /**

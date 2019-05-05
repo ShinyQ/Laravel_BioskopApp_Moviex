@@ -16,32 +16,29 @@ class LoginController extends Controller
 {
 
   public function index(){
-    return view('auth/login');
+   if (Auth::user()) {
+  		return redirect('/genre');
+  	} else {
+  	  return view('auth/login');
+  	}
   }
 
   public function doLogin(Request $request){
-      $email = $request->email;
-      $password = $request->password;
-      dd($request);
-      $data = User::where('email',$email)->first();
 
-      if($data){
-          if(User::where('password',$password)->first()){
-            Session::put('first_name',$data->first_name);
-            Session::put('last_name',$data->last_name);
-            Session::put('email',$data->email);
-            Session::put('login',TRUE);
-            Session::flash('sukses', 'Sukses Masuk Ke Akun Anda');
-            return redirect('/genre');
-          }
-          else{
-            Session::flash('gagal', 'Username Atau Password Salah');
-            return redirect()->back();
-          }
+      $this->validate($request, [
+        'email' => 'required|email',
+        'password' => 'required',
+      ]);
+
+      if(!Auth::attempt([
+        'email' => $request->email,
+        'password' => $request->password
+      ])){
+        Session::flash('gagal', 'Username Atau password Salah');
+        return redirect()->back();
       }
       else{
-        Session::flash('gagal', 'Username Atau Password Salah');
-        return redirect()->back();
+          return redirect('/genre');
       }
     }
 
@@ -84,8 +81,8 @@ class LoginController extends Controller
 
   public function dologout()
   {
-    Session::flush();
-    return redirect()->back();
+    Auth::logout();
+    return redirect('/login');
   }
 
 

@@ -34,18 +34,24 @@
     <!-- ============================================================== -->
     <div class="splash-container">
         <div class="card ">
+            @if (Session::has('gagal'))
+               <div class="alert alert-danger">
+                   <center>
+                     {{ Session::get('gagal') }}
+                    </center>
+               </div>
+            @endif
             <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{{url('assets/images/logo.png')}}" alt="logo"></a><span class="splash-description">Login Untuk Melanjutkan</span></div>
             <div class="card-body">
-                <form action="#" method="post">
+                <form action="/login1" method="post">
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="email" id="username" type="text" placeholder="Username" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Password">
                     </div>
-
-                    {{-- <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button> --}}
-                    <a href="/genre" class="btn btn-primary btn-lg btn-block">Login</a>
+                    @csrf
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
                 </form>
             </div>
             <div class="card-footer bg-white p-0  ">

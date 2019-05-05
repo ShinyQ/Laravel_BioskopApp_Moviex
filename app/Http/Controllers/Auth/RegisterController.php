@@ -17,7 +17,30 @@ class RegisterController extends Controller
 {
 
   public function index(){
+    if (Auth::user()) {
+   		return redirect('/genre');
+   	} else {
     return view('auth/register');
+    }
+  }
+
+  public function doRegister(Request $request)
+  {
+    $this->validate($request, [
+      'name' => 'required',
+      'email' => 'required|email',
+      'password' => 'required',
+      'phone'=> 'required',
+    ]);
+
+    User::create([
+      'name' => $request->name,
+      'email' => $request->email,
+      'role' => 'admin',
+      'password' => Bcrypt($request->password),
+      'phone'=> $request->phone
+    ]);
+    return redirect('/login');
   }
 
   public function register(Request $request)
