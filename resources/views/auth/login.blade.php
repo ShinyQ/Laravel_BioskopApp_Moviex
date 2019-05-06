@@ -41,6 +41,13 @@
                     </center>
                </div>
             @endif
+            @if (Session::has('sukses'))
+               <div class="alert alert-success">
+                   <center>
+                     {{ Session::get('sukses') }}
+                    </center>
+               </div>
+            @endif
             <div class="card-header text-center"><a href="../index.html"><img class="logo-img" src="{{url('assets/images/logo.png')}}" alt="logo"></a><span class="splash-description">Login Untuk Melanjutkan</span></div>
             <div class="card-body">
                 <form action="/login1" method="post">

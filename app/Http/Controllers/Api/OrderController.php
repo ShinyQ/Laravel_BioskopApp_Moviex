@@ -49,53 +49,54 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-      try {
-        $this->validate($request, [
-              'user_id'        => 'required|numeric',
-              'film_id'        => 'required|numeric',
-              'qty'            => 'required',
-        ]);
+      try{
+      $this->validate($request, [
+            'user_id'        => 'required|numeric',
+            'film_id'        => 'required|numeric',
+            'qty'            => 'required',
+      ]);
 
-        $checkfilm = Films::where('id', $request->film_id)->first();
-        $checkharga = Studios::where('id', $checkfilm->studio_id)->first();
+      $checkfilm = Films::where('id', $request->film_id)->first();
+      $checkharga = Studios::where('id', $checkfilm->studio_id)->first();
 
-        $checkquota = $checkharga->quota - $request->qty;
-        if($checkquota <= 0){
-          $code= 402;
-          $response = "Quota Tidak Mencukupi";
+      $checkquota = $checkharga->quota - $request->qty;
+
+      if($checkquota <= 0){
+        $code= 402;
+        $response = "Quota Sudah Penuh";
+      }
+
+      else{
+        $order = Orders::all();
+        $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
+        if($checkOrder){
+          $ubahqty = $checkOrder->qty + $request->qty;
+          $response = Orders::find($checkOrder->id);
+          $response->qty = $ubahqty;
+          $response->total_price = $ubahqty * $checkharga->price;
+          $response->save();
+
+          $KurangiQuota = $checkquota;
+          $dataStudio = Studios::find($checkfilm->studio_id);
+          $dataStudio->quota = $KurangiQuota;
+          $dataStudio->save();
+
+          $code = 200;
         }
 
         else{
-          $order = Orders::all();
-          $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
-          if($checkOrder){
-            $ubahqty = $checkOrder->qty + $request->qty;
-            $response = Orders::find($checkOrder->id);
-            $response->qty = $ubahqty;
-            $response->total_price = $ubahqty * $checkharga->price;
-            $response->save();
+          $KurangiQuota = $checkquota;
+          $dataStudio = Studios::find($checkfilm->studio_id);
+          $dataStudio->quota = $KurangiQuota;
+          $dataStudio->save();
 
-            $KurangiQuota = $checkquota;
-            $dataStudio = Studios::find($checkfilm->studio_id);
-            $dataStudio->quota = $KurangiQuota;
-            $dataStudio->save();
-            $code = 200;
-          }
+          $response = new Orders($request->except("_token"));
+          $response->total_price = ($request->qty * $checkharga->price);
+          $response->save();
 
-          else{
-            $KurangiQuota = $checkquota;
-            $dataStudio = Studios::find($checkfilm->studio_id);
-            $dataStudio->quota = $KurangiQuota;
-            $dataStudio->save();
-
-            $response = new Orders($request->except("_token"));
-            $response->total_price = ($request->qty * $checkharga->price);
-            $response->save();
-
-            $code = 200;
-          }
+          $code = 200;
         }
-
+       }
       } catch (\Exception $e) {
         if($e instanceof ValidationException){
           $response = $e->errors();

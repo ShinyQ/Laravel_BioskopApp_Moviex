@@ -10,7 +10,7 @@
                     {{ Session::get('sukses_tambah') }}
                 </div>
              @endif
-          
+
              <div class="row">
                <div class="col-md-6">
                  @if($errors->has('name'))
@@ -118,7 +118,7 @@
              <div class="col-md-3 pull-right">
                <form action="/film" method="GET">
                   <span class="pull-right">
-                    <input type="text" name="search" value="request()->get" class="form-control" placeholder="Search here ..">
+                    <input type="text" name="search" value="{{ request()->get('search') }}" class="form-control" placeholder="Search here ..">
                   </span>
                 </form>
              </div>
@@ -153,8 +153,8 @@
                         </td>
                         <td>{{ $item->name }}</td>
                         {{-- <td>{{ $item->deskripsi }}</td> --}}
-                        <td>{{ $item->genre->name }}</td>
-                        <td>{{ $item->studio->name }}</td>
+                        <td>{{ $item->genre->name ?? '-' }}</td>
+                        <td>{{ $item->studio->name ?? '-' }}</td>
                         <td>{{ date('H:i',strtotime($jadwal1))  }}</td>
                         <td>{{ date('H:i',strtotime($jadwal2))  }}</td>
                         <td>

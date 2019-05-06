@@ -82,6 +82,7 @@ class LoginController extends Controller
   public function dologout()
   {
     Auth::logout();
+    Session::flash('sukses', 'Sukses Keluar Akun');
     return redirect('/login');
   }
 

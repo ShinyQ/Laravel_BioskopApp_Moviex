@@ -183,6 +183,7 @@ class OrdersController extends Controller
 
         $order = Orders::findOrFail($id);
         $order->qty = $request->qty;
+        $order->total_price = $dataStudio * $order->qty;
         $order->save();
         Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');
       }
@@ -199,6 +200,7 @@ class OrdersController extends Controller
 
           $order = Orders::findOrFail($id);
           $order->qty = $request->qty;
+          $order->total_price = $dataStudio->price * $request->qty;
           $order->save();
 
           Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');

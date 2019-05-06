@@ -18,6 +18,6 @@ class Films extends Model
     }
 
     function studio(){
-        return $this->hasOne(Studios::class, "id", "studio_id");
+        return $this->hasOne(Studios::class, "id", "studio_id")->withTrashed();
     }
 }

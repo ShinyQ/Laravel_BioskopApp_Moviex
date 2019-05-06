@@ -18,7 +18,7 @@
                  <div class="form-group">
                     <label for="inputText3" class="col-form-label">Pengguna :</label>
                     <select type="text" class="form-control" name="user_id">
-                      <option>-- Pilih Genre --</option>
+                      <option>-- Pilih Pengguna --</option>
                       @foreach ($user as $data)
                         <option value="{{ $data->id }}">{{ $data->name }}</option>
                       @endforeach
@@ -35,7 +35,7 @@
                     <select type="text" class="form-control" name="film_id">
                       <option>-- Pilih Film --</option>
                       @foreach ($film as $data)
-                        <option value="{{ $data->id }}">{{ $data->name }}</option>
+                        <option value="{{ $data->id }}">{{ $data->name }} - {{ $data->studio->name }} - {{ $data->studio->quota }} Tersisa</option>
                       @endforeach
                     </select>
                  </div>
@@ -70,7 +70,7 @@
                   {{ Session::get('gagal') }}
              </div>
            @endif
-           <label for="inputText3" class="col-form-label">List Genre Order</label>
+           <label for="inputText3" class="col-form-label">List Data Order</label>
 
            <div class="row">
              <div class="col-md-3 pull-right">
@@ -101,7 +101,7 @@
                         <td>{{ $item->user->name }}</td>
                         <td>{{ $item->film->name }}</td>
                         <td>{{ $item->qty }}</td>
-                        <td>Rp{{ number_format($item->film->studio->price,2,',','.')}}</td>
+                        <td>Rp{{ number_format($item->film->studio->price ,2,',','.') }}</td>
                         <td>Rp{{ number_format( $item->total_price,2,',','.')}}</td>
                         <td>
                            <a class="btn btn-info" style="color:white!important" href="order/detail/{{ $item->id }}"><i class="fa fa-eye"></i></a>

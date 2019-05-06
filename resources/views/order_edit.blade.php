@@ -45,7 +45,7 @@
                 <tr>
                    <td>Jumlah</td>
                    <td>:</td>
-                   <td><input type="text"  name="qty" value="{{ $order->qty }}" class="form-control" ></td>
+                   <td><input type="text" name="qty" value="{{ $order->qty }}" class="form-control"></td>
                 </tr>
 
                 <tr>

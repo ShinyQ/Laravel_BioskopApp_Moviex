@@ -10,4 +10,11 @@ class Genres extends Model
     public $timestamps = true;
     protected $table = "genres";
     protected $fillable = ['name'];
+
+    public function delete()
+    {
+        $this->films()->delete();
+        return parent::delete();
+    }
+
 }

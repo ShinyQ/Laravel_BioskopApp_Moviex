@@ -40,6 +40,7 @@ class RegisterController extends Controller
       'password' => Bcrypt($request->password),
       'phone'=> $request->phone
     ]);
+    Session::flash('sukses', 'Sukses Mendaftar Akun');
     return redirect('/login');
   }
 
