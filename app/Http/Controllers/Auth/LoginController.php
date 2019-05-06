@@ -17,7 +17,7 @@ class LoginController extends Controller
 
   public function index(){
    if (Auth::user()) {
-  		return redirect('/genre');
+  		return redirect('/studio');
   	} else {
   	  return view('auth/login');
   	}
@@ -38,7 +38,7 @@ class LoginController extends Controller
         return redirect()->back();
       }
       else{
-          return redirect('/genre');
+          return redirect('/studio');
       }
     }
 

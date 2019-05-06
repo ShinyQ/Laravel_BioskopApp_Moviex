@@ -4,12 +4,13 @@
 
       <div class="card">
          <div class="card-body">
-           <form action="/film" method="post">
+           <form action="/film" method="post"  enctype="multipart/form-data">
              @if (Session::has('sukses_tambah'))
                 <div class="alert alert-success">
                     {{ Session::get('sukses_tambah') }}
                 </div>
              @endif
+          
              <div class="row">
                <div class="col-md-6">
                  @if($errors->has('name'))
@@ -81,6 +82,16 @@
                  </div>
                </div>
 
+               <div class="col-md-12">
+                 @if($errors->has('image'))
+                    <h5><strong><font color="red">{{ $errors->first('end_at')}}</font></strong></h5>
+                 @endif
+                 <div class="form-group">
+                    <label for="inputText3" class="col-form-label">Pilih Gambar :</label>
+                    <input name="image" type="file" class="form-control"><br />
+                 </div>
+               </div>
+
             </div>
              {{ csrf_field() }}
 
@@ -107,7 +118,7 @@
              <div class="col-md-3 pull-right">
                <form action="/film" method="GET">
                   <span class="pull-right">
-                    <input type="text" name="search" class="form-control" placeholder="Search here ..">
+                    <input type="text" name="search" value="request()->get" class="form-control" placeholder="Search here ..">
                   </span>
                 </form>
              </div>
@@ -117,8 +128,9 @@
                  <thead>
                      <tr>
                          <th scope="col">No</th>
+                         <th scope="col">Gambar</th>
                          <th scope="col">Nama Film</th>
-                         <th scope="col">Deskripsi Film</th>
+                         {{-- <th scope="col">Deskripsi Film</th> --}}
                          <th scope="col">Genre</th>
                          <th scope="col">Studio</th>
                          <th scope="col">Waktu Mulai</th>
@@ -132,8 +144,15 @@
                        <?php  $jadwal2 = $item->end_at  ?>
                       <tr>
                         <th scope="row">{{ $counter++ }}</th>
+                        <td>
+                          @if ($item->image)
+                            <img src="{{asset('images')}}/{{ $item->image }}" width="150px"/>
+                          @else
+                          Tidak Ada Gambar
+                          @endif
+                        </td>
                         <td>{{ $item->name }}</td>
-                        <td>{{ $item->deskripsi }}</td>
+                        {{-- <td>{{ $item->deskripsi }}</td> --}}
                         <td>{{ $item->genre->name }}</td>
                         <td>{{ $item->studio->name }}</td>
                         <td>{{ date('H:i',strtotime($jadwal1))  }}</td>

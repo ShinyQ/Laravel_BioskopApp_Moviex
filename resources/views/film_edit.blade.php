@@ -21,7 +21,7 @@
            @if($errors->has('price'))
               <h5><strong><font color="red">{{ $errors->first('price')}}</font></strong></h5>
            @endif
-           <form action="/film/{{ $film->id }}" method="post">
+           <form action="/film/{{ $film->id }}" method="post" enctype="multipart/form-data">
              <table class="table table-bordered">
                 <tr>
                    <td>Id Film</td>
@@ -77,6 +77,19 @@
                    <td>Deskripsi Film</td>
                    <td>:</td>
                    <td><input type="time" name="end_at" value="{{ $film->end_at }}" class="form-control" ></td>
+                </tr>
+
+                <tr>
+                   <td>Gambar Film</td>
+                   <td>:</td>
+                   <td>
+                     <input type="file" name="image" value="{{ $film->image }}" class="form-control" >
+                     @if ($film->image)
+                       <img src="{{asset('images')}}/{{ $film->image }}" width="200px"/>
+                     @else
+                     Tidak Ada Gambar
+                     @endif
+                   </td>
                 </tr>
 
                 <input type="hidden" name="_method" value="PUT">

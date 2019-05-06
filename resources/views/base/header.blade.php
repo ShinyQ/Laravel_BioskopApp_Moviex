@@ -63,7 +63,6 @@
                           <a class="nav-link" href="/logout1" aria-expanded="false" aria-controls="submenu-1"><i class="fas fa-sign-out-alt"></i>Logout <span class="badge badge-success">6</span></a>
                       </li>
 
-
                             </ul>
                         </div>
                     </li>

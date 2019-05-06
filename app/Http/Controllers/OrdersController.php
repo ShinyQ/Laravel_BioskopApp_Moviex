@@ -187,6 +187,7 @@ class OrdersController extends Controller
         Session::flash('Sukses', 'Jumlah Order Berhasil Diubah');
       }
       elseif($checkquotasekarang->qty > $request->qty){
+        $checkquota = $checkharga->quota - $request->qty;
         if($checkquota <= 0){
           Session::flash('gagal', 'Quota Film Sudah Tidak Mencukupi');
         }
@@ -210,7 +211,6 @@ class OrdersController extends Controller
         $order->save();
         Session::flash('Sukses', 'Quota Film Berhasil Diubah');
       }
-
       return redirect()->back();
     }
 

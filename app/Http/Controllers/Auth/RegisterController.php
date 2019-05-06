@@ -18,7 +18,7 @@ class RegisterController extends Controller
 
   public function index(){
     if (Auth::user()) {
-   		return redirect('/genre');
+   		return redirect('/studio');
    	} else {
     return view('auth/register');
     }

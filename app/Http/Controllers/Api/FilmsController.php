@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
+use App\Http\Resources\FilmResource;
 use App\Genres;
 use Exception;
 use App\Films;
@@ -31,6 +32,7 @@ class FilmsController extends Controller
 
         $pagination = 5;
         $response = $response->paginate($pagination);
+        $response = FilmResource::collection($response);
 
       } catch (\Exception $e) {
         $code = 500;
@@ -84,7 +86,8 @@ class FilmsController extends Controller
     {
       try {
         $code= "200";
-        $response = Films::with('genre','studio')->findOrFail($id);
+        $response = Films::findOrFail($id);
+        $response = new FilmResource($response);
       } catch (\Exception $e) {
         if($e instanceof ValidationException){
           $response = $e->errors();

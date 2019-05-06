@@ -68,9 +68,18 @@ class FilmsController extends Controller
           'start_at'        => 'required',
           'end_at'        => 'required',
       ]);
-      $film = new Films($request->except("_token"));
-      $film->save();
-      Session::flash('sukses_tambah', 'Data Berhasil Ditambahkan');
+      $checknama = Films::where('name', $request->name)->get();
+      if($checknama){
+        Session::flash('sukses_tambah', 'Data Film Sudah Ada');
+      }
+      else{
+        $film = new Films($request->except("_token"));
+        $imageName = time().'.'.request()->image->getClientOriginalExtension();
+        request()->image->move(public_path('images'), $imageName);
+        $film->image = $imageName;
+        $film->save();
+        Session::flash('sukses_tambah', 'Data Berhasil Ditambahkan');
+      }
       return redirect()->back();
     }
 
@@ -118,14 +127,35 @@ class FilmsController extends Controller
           'studio_id'        => 'required',
       ]);
       $film = Films::findOrFail($id);
-      $film->name = $request->name;
-      $film->deskripsi = $request->deskripsi;
-      $film->genre_id = $request->genre_id;
-      $film->studio_id = $request->studio_id;
-      $film->start_at = $request->start_at;
-      $film->end_at = $request->end_at;
-      $film->save();
-      Session::flash('sukses', 'Data Berhasil Di Edit');
+      // $checknama = Films::where('name', $request->name)->get();
+      // if($checknama){
+      //   Session::flash('gagal', 'Data Film Sudah Ada');
+      // }
+      // else{
+        if($request->image){
+          $imageName = time().'.'.request()->image->getClientOriginalExtension();
+          request()->image->move(public_path('images'), $imageName);
+          $film->image = $imageName;
+          $film->name = $request->name;
+          $film->deskripsi = $request->deskripsi;
+          $film->genre_id = $request->genre_id;
+          $film->studio_id = $request->studio_id;
+          $film->start_at = $request->start_at;
+          $film->end_at = $request->end_at;
+          $film->save();
+          Session::flash('sukses', 'Data Berhasil Di Edit');
+        }
+        else{
+          $film->name = $request->name;
+          $film->deskripsi = $request->deskripsi;
+          $film->genre_id = $request->genre_id;
+          $film->studio_id = $request->studio_id;
+          $film->start_at = $request->start_at;
+          $film->end_at = $request->end_at;
+          $film->save();
+          Session::flash('sukses', 'Data Berhasil Di Edit');
+        }
+      // }
       return redirect()->back();
     }
 
