@@ -8,6 +8,7 @@ use App\Genres;
 use App\Films;
 use Session;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -65,6 +66,7 @@ class OrdersController extends Controller
      */
     public function store(Request $request)
     {
+
       $this->validate($request, [
             'user_id'        => 'required|numeric',
             'film_id'        => 'required|numeric',

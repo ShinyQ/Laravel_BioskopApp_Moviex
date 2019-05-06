@@ -35,7 +35,7 @@
                     <select type="text" class="form-control" name="film_id">
                       <option>-- Pilih Film --</option>
                       @foreach ($film as $data)
-                        <option value="{{ $data->id }}">{{ $data->name }} - {{ $data->studio->name }} - {{ $data->studio->quota }} Tersisa</option>
+                        <option value="{{ $data->id }}">{{ $data->name }} - {{ $data->studio->name }} (Rp {{ number_format($data->studio->price ,2,',','.') }}) - {{ $data->studio->quota }} Tersisa</option>
                       @endforeach
                     </select>
                  </div>

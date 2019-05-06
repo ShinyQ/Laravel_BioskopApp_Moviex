@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Validation\ValidationException;
 use App\Http\Resources\FilmResource;
+use Illuminate\Support\Facades\DB;
 use App\Genres;
 use Exception;
 use App\Films;
@@ -24,15 +25,33 @@ class FilmsController extends Controller
       try {
         $code = 200;
         $counter = 1;
-        $response = Films::query()->with('genre','studio')->latest();
+        $response = Films::query()->with('user', 'genre')->latest();
+
         if (request()->has("search") && strlen(request()->query("search")) >= 1) {
           $response->where(
             "films.name", "like", "%" . request()->query("search") . "%"
-        );}
-
+        );
         $pagination = 5;
         $response = $response->paginate($pagination);
         $response = FilmResource::collection($response);
+        }
+
+        elseif(request()->has("genre") && strlen(request()->query("genre")) >= 1) {
+          $response = DB::table('films')
+          ->join('genres', 'genres.id', '=', 'films.genre_id')
+          ->select('films.*', 'genres.name as genre')->where(
+            "genres.name", "like", "%" . request()->query("genre") . "%"
+        )->get();
+
+        // $pagination = 5;
+        // $response = $response->paginate($pagination);
+        // $response = FilmResource::collection($response);
+      }else{
+        $pagination = 5;
+        $response = $response->paginate($pagination);
+        $response = FilmResource::collection($response);
+      }
+
 
       } catch (\Exception $e) {
         $code = 500;

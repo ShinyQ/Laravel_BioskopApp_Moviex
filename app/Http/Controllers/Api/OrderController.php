@@ -11,6 +11,8 @@ use App\Films;
 use App\Genres;
 use App\Studios;
 use ApiBuilder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -25,13 +27,21 @@ class OrderController extends Controller
         $code = 200;
         $counter = 1;
         $response = Orders::query()->with('user','film',)->latest();
-        if (request()->has("search") && strlen(request()->query("search")) >= 1) {
-          $response->where(
-            "genres.name", "like", "%" . request()->query("search") . "%"
-        );}
+          if (request()->has("search") && strlen(request()->query("search")) >= 1) {
+            $response->where(
+              "users.name", "like", "%" . request()->query("search") . "%"
+          );
+          $pagination = 5;
+          $response = $response->paginate($pagination);
+        }
 
-        $pagination = 5;
-        $response = $response->paginate($pagination);
+        elseif(request()->has("name") && strlen(request()->query("name")) >= 1) {
+            $response = DB::table('orders')
+            ->join('users', 'users.id', '=', 'orders.user_id')
+            ->select('orders.*', 'users.name')->where(
+              "users.name", "like", "%" . request()->query("name") . "%"
+          )->get();
+        }
       } catch (\Exception $e) {
         $code = 500;
         $response = "An Error Has Ocurred";
@@ -51,7 +61,6 @@ class OrderController extends Controller
     {
       try{
       $this->validate($request, [
-            'user_id'        => 'required|numeric',
             'film_id'        => 'required|numeric',
             'qty'            => 'required',
       ]);
@@ -68,7 +77,7 @@ class OrderController extends Controller
 
       else{
         $order = Orders::all();
-        $checkOrder = Orders::where('user_id', $request->user_id)->where('film_id', $request->film_id)->first();
+        $checkOrder = Orders::where('user_id', Auth::user()->id)->where('film_id', $request->film_id)->first();
         if($checkOrder){
           $ubahqty = $checkOrder->qty + $request->qty;
           $response = Orders::find($checkOrder->id);
@@ -91,6 +100,7 @@ class OrderController extends Controller
           $dataStudio->save();
 
           $response = new Orders($request->except("_token"));
+          $response->user_id = Auth::user()->id;
           $response->total_price = ($request->qty * $checkharga->price);
           $response->save();
 
