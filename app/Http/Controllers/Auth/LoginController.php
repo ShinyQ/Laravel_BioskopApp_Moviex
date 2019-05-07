@@ -19,7 +19,7 @@ class LoginController extends Controller
    if (Auth::user()) {
   		return redirect('/studio');
   	} else {
-  	  return view('auth/login');
+  	   return view('auth/loginuser');
   	}
   }
 

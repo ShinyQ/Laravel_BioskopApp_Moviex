@@ -22,14 +22,14 @@ use Illuminate\Http\Request;
   Route::get('logout','Auth\LoginController@logout');
 
 
-  Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('user','Auth\UserController@detail');
-
-    Route::prefix('v1')->group(function(){
-      Route::apiResource("user", "Api\UserController");
+  // Route::group(['middleware' => 'auth:api'], function () {
+  //   // Route::get('user','Auth\UserController@detail');
+  //
+  //     Route::prefix('v1')->group(function(){
+      // Route::apiResource("user", "Api\UserController");
       Route::apiResource("genre", "Api\GenresController");
-      Route::apiResource("studio", "Api\StudioController");
+      // Route::apiResource("studio", "Api\StudioController");
       Route::apiResource("film", "Api\FilmsController");
       Route::apiResource("order", "Api\OrderController");
-    });
-  });
+  //   });
+  // });

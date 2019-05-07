@@ -15,12 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/logout1', 'Auth\LoginController@dologout');
-Route::get('/home', 'HomeController@index');
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 Route::get('/login', 'Auth\LoginController@index')->name('login');
+Route::get('/logout1', 'Auth\LoginController@dologout');
 Route::get('/register', 'Auth\RegisterController@index');
 Route::post('/login1', 'Auth\LoginController@doLogin');
 Route::post('/register1', 'Auth\RegisterController@doRegister');
+
+// Route::get('/verify','EmailController@index');
+
+Route::get('/kirimemail','EmailController@index');
 
 Route::middleware("auth")->group(function() {
 

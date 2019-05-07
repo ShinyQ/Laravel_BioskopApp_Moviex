@@ -11,7 +11,11 @@ use ApiBuilder;
 use Session;
 use Hash;
 use Bcrypt;
+use Carbon\Carbon;
 use App\User;
+
+use App\Mail\VerifyMail;
+use Mail;
 
 class RegisterController extends Controller
 {
@@ -33,14 +37,17 @@ class RegisterController extends Controller
       'phone'=> 'required',
     ]);
 
-    User::create([
+    $user = User::create([
       'name' => $request->name,
       'email' => $request->email,
       'role' => 'admin',
       'password' => Bcrypt($request->password),
-      'phone'=> $request->phone
+      'phone'=> $request->phone,
+      'token' => str_random(40)
     ]);
-    Session::flash('sukses', 'Sukses Mendaftar Akun');
+
+    Mail::to($request->email)->send(new VerifyMail($user));
+    Session::flash('sukses', 'Sukses Mendaftar Akun Silahkan, Cek Email Untuk Konfirmasi');
     return redirect('/login');
   }
 
@@ -71,5 +78,25 @@ class RegisterController extends Controller
 
     return ApiBuilder::apiResponseSuccess('Register Sukses!', $success, 200);
   }
+
+  public function verifyUser($token)
+   {
+       $verifyUser = User::where('token', $token)->first();
+       if(isset($verifyUser) ){
+           if($verifyUser->email_verified_at == null) {
+               $time = Carbon::now();
+               $verifyUser->email_verified_at = $time;
+               $verifyUser->save();
+               Session::flash('sukses', 'Sukses Melakukan Konfirmasi, Silahkan Login');
+           }else{
+             Session::flash('gagal', 'Anda Sudah Mengkonfirmasi Akun');
+           }
+       }else{
+           Session::flash('gagal', 'Akun Tersebut Tidak Ditemukan');
+           return redirect('/login');
+       }
+
+       return redirect('/login');
+   }
 
 }
