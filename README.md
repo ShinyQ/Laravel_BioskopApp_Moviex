@@ -4,11 +4,11 @@
 
 <h3> <b> Application Highlight :</b> </h3>
 
-<img src="https://gitlab.com/dot-academy-batch-1/challange-2-moviex-kurniadi/raw/master/ss/C1.PNG"
-height="450px" width="1000px">
+<img src="https://raw.githubusercontent.com/ShinyQ/Laravel_BioskopApp_Moviex/master/ss/C1.PNG"
+height="450px" width="800px">
 
-<img src="https://gitlab.com/dot-academy-batch-1/challange-2-moviex-kurniadi/raw/master/ss/C2.PNG"
-height="450px" width="1000px">
+<img src="https://raw.githubusercontent.com/ShinyQ/Laravel_BioskopApp_Moviex/master/ss/C2.PNG"
+height="450px" width="800px">
 
 
 <h3><b>Fitur - Ditur Aplikasi :</b></h3>
